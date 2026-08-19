@@ -32,8 +32,7 @@ public class TaskRequest {
                 taskRequest.getDescricao(),
                 null, // dataInicio será definido quando a tarefa for iniciada
                 taskRequest.getDataFim(),
-                Status.A_FAZER, // status inicial
-                null // atribuido será definido posteriormente
+                Status.A_FAZER
         );
     }
 

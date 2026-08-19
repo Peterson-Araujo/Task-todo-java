@@ -14,11 +14,11 @@ public class TaskService {
 
     public TaskService() {
         this.tasks = new ArrayList<>();
+        preencherDados();
     }
 
     public void addTask(Task task) {
         task.setId((long) (tasks.size() + 1));
-        task.setStatus(Status.A_FAZER);
         tasks.add(task);
     }
 
@@ -40,19 +40,47 @@ public class TaskService {
                         new TaskException("Task not found: " + id));
     }
 
-    public void deleteTask(Long id) {
-        Task task = findById(id);
-        tasks.remove(task);
+    public boolean deleteTask(Long id) {
+        try {
+            Task task = findById(id);
+            tasks.remove(task);
+            return true;
+        } catch (TaskException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
-    public void completeTask(Long id) {
-        Task task = findById(id);
-        task.markAsDone();
+    public boolean completeTask(Long id) {
+        try {
+            Task task = findById(id);
+            task.setDataFim(LocalDate.now());
+            task.markAsDone();
+            return true;
+        } catch (TaskException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
-    public void startTask(Long id) {
-        Task task = findById(id);
-        task.setDataInicio(LocalDate.now());
-        task.start();
+    public boolean startTask(Long id) {
+        try {
+            Task task = findById(id);
+            task.setDataInicio(LocalDate.now());
+            task.start();
+            return true;
+        } catch (TaskException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
+
+    // Método para preencher a lista de tarefas com dados fictícios
+    private void preencherDados() {
+        addTask(new Task("Tarefa 1", "Descrição da tarefa 1", null, LocalDate.now().plusDays(5), Status.A_FAZER));
+        addTask(new Task("Tarefa 2", "Descrição da tarefa 2", null, LocalDate.now().plusDays(3), Status.A_FAZER));
+        addTask(new Task("Tarefa 3", "Descrição da tarefa 3", null, LocalDate.now().plusDays(7), Status.A_FAZER));
+        addTask(new Task("Tarefa 4", "Descrição da tarefa 4", null, LocalDate.now().plusDays(2), Status.A_FAZER));
+        addTask(new Task("Tarefa 5", "Descrição da tarefa 5", null, LocalDate.now().plusDays(10), Status.A_FAZER));
     }
 }

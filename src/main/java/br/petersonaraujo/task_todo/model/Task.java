@@ -12,15 +12,13 @@ public class Task {
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private Status status;
-    private String atribuido;
 
-    public Task(String nome, String descricao, LocalDate dataInicio, LocalDate dataFim, Status status, String atribuido) {
+    public Task(String nome, String descricao, LocalDate dataInicio, LocalDate dataFim, Status status) {
         this.nome = nome;
         this.descricao = descricao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.status = status;
-        this.atribuido = atribuido;
     }
 
     public void markAsDone() {
@@ -79,11 +77,14 @@ public class Task {
         this.status = status;
     }
 
-    public String getAtribuido() {
-        return atribuido;
-    }
-
-    public void setAtribuido(String atribuido) {
-        this.atribuido = atribuido;
+    @Override
+    public String toString() {
+        return "Task: "
+                + "id = " + id
+                +", nome = '" + nome
+                + '\'' +", descricao = '" + descricao
+                + '\'' +", dataInicio = " + dataInicio
+                + ", dataFim = " + dataFim
+                +", status atual = " + status;
     }
 }
