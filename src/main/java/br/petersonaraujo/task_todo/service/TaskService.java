@@ -5,21 +5,25 @@ import br.petersonaraujo.task_todo.model.Status;
 import br.petersonaraujo.task_todo.model.Task;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TaskService {
 
     private final List<Task> tasks;
+    private final FileStorageService fileStorageService = new FileStorageService();
 
     public TaskService() {
-        this.tasks = new ArrayList<>();
-        preencherDados();
+        this.tasks = fileStorageService.load();
     }
 
     public void addTask(Task task) {
+        if (task.getDataFim().isBefore(LocalDate.now())) {
+            throw new TaskException("Error: Task end date cannot be in the past");
+        }
+
         task.setId((long) (tasks.size() + 1));
         tasks.add(task);
+        fileStorageService.save(tasks);
     }
 
     public List<Task> getAllTasks() {
@@ -37,16 +41,17 @@ public class TaskService {
                 .filter(task -> task.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() ->
-                        new TaskException("Task not found: " + id));
+                        new TaskException("Error: Task not found: " + id));
     }
 
     public boolean deleteTask(Long id) {
         try {
             Task task = findById(id);
             tasks.remove(task);
+            fileStorageService.save(tasks);
             return true;
         } catch (TaskException e) {
-            System.err.println(e.getMessage());
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -56,9 +61,10 @@ public class TaskService {
             Task task = findById(id);
             task.setDataFim(LocalDate.now());
             task.markAsDone();
+            fileStorageService.save(tasks);
             return true;
         } catch (TaskException e) {
-            System.err.println(e.getMessage());
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -68,19 +74,11 @@ public class TaskService {
             Task task = findById(id);
             task.setDataInicio(LocalDate.now());
             task.start();
+            fileStorageService.save(tasks);
             return true;
         } catch (TaskException e) {
-            System.err.println(e.getMessage());
+            System.out.println(e.getMessage());
             return false;
         }
-    }
-
-    // Método para preencher a lista de tarefas com dados fictícios
-    private void preencherDados() {
-        addTask(new Task("Tarefa 1", "Descrição da tarefa 1", null, LocalDate.now().plusDays(5), Status.A_FAZER));
-        addTask(new Task("Tarefa 2", "Descrição da tarefa 2", null, LocalDate.now().plusDays(3), Status.A_FAZER));
-        addTask(new Task("Tarefa 3", "Descrição da tarefa 3", null, LocalDate.now().plusDays(7), Status.A_FAZER));
-        addTask(new Task("Tarefa 4", "Descrição da tarefa 4", null, LocalDate.now().plusDays(2), Status.A_FAZER));
-        addTask(new Task("Tarefa 5", "Descrição da tarefa 5", null, LocalDate.now().plusDays(10), Status.A_FAZER));
     }
 }

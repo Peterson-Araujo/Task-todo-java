@@ -1,10 +1,11 @@
 package br.petersonaraujo.task_todo.model;
 
-import br.petersonaraujo.task_todo.ui.dtos.TaskResponse;
-
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Task {
+public class Task implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String nome;

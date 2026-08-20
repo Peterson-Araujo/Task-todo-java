@@ -11,33 +11,27 @@ public class FileStorageService {
 
     private static final String FILE_PATH = "data/tasks.dat";
 
-    public void save(List<Task> tasks) {
-        try (ObjectOutputStream output =
-                     new ObjectOutputStream(
-                             new FileOutputStream(FILE_PATH))) {
-
+    public void save(List<Task> tasks) throws TaskException {
+        try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             output.writeObject(tasks);
-
+            output.flush();
         } catch (IOException e) {
             throw new TaskException("Error saving tasks", e);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public List<Task> load() {
+    public List<Task> load() throws TaskException {
+        try {
+            File file = new File(FILE_PATH);
 
-        File file = new File(FILE_PATH);
+            if (!file.exists() || file.length() == 0) {
+                return new ArrayList<>();
+            }
 
-        if (!file.exists()) {
-            return new ArrayList<>();
-        }
-
-        try (ObjectInputStream input =
-                     new ObjectInputStream(
-                             new FileInputStream(FILE_PATH))) {
-
-            return (List<Task>) input.readObject();
-
+            try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(file))) {
+                return (List<Task>) input.readObject();
+            }
         } catch (IOException | ClassNotFoundException e) {
             throw new TaskException("Error loading tasks", e);
         }
