@@ -1,6 +1,6 @@
 📝 TODO App
 
-Aplicação de gerenciamento de tarefas desenvolvida em Java 17, criada com o objetivo de praticar e demonstrar conceitos fundamentais de Programação Orientada a Objetos (OOP) e recursos essenciais da linguagem Java.
+Aplicação de gerenciamento de tarefas desenvolvida em Java 17, criada com o objetivo de praticar conceitos fundamentais de Programação Orientada a Objetos (OOP) e recursos essenciais da linguagem Java.
 
 A aplicação permite criar, listar, atualizar, concluir e excluir tarefas, utilizando serialização de objetos Java para persistência dos dados em arquivo.
 
