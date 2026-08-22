@@ -2,6 +2,7 @@ package br.petersonaraujo.task_todo.ui;
 
 import br.petersonaraujo.task_todo.exception.TaskException;
 import br.petersonaraujo.task_todo.model.Status;
+import br.petersonaraujo.task_todo.service.FileStorageService;
 import br.petersonaraujo.task_todo.service.TaskService;
 import br.petersonaraujo.task_todo.ui.dtos.TaskRequest;
 
@@ -14,7 +15,8 @@ public class TodoApp {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        final TaskService taskService = new TaskService();
+        FileStorageService fileStorageService = new FileStorageService();
+        TaskService taskService = new TaskService(fileStorageService);
         boolean programaAtivo = true;
 
         System.out.println("Bem-vindo ao TodoApp!");

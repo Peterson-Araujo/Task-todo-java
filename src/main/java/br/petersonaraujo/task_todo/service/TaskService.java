@@ -10,9 +10,10 @@ import java.util.List;
 public class TaskService {
 
     private final List<Task> tasks;
-    private final FileStorageService fileStorageService = new FileStorageService();
+    private final FileStorageService fileStorageService;
 
-    public TaskService() {
+    public TaskService(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
         this.tasks = fileStorageService.load();
     }
 
