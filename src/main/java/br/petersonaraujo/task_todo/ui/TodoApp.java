@@ -1,10 +1,13 @@
 package br.petersonaraujo.task_todo.ui;
 
+import br.petersonaraujo.task_todo.exception.TaskException;
 import br.petersonaraujo.task_todo.model.Status;
+import br.petersonaraujo.task_todo.service.FileStorageService;
 import br.petersonaraujo.task_todo.service.TaskService;
 import br.petersonaraujo.task_todo.ui.dtos.TaskRequest;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class TodoApp {
@@ -12,13 +15,15 @@ public class TodoApp {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        final TaskService taskService = new TaskService();
+        FileStorageService fileStorageService = new FileStorageService();
+        TaskService taskService = new TaskService(fileStorageService);
         boolean programaAtivo = true;
 
         System.out.println("Bem-vindo ao TodoApp!");
 
         while (programaAtivo) {
 
+            System.out.println();
             System.out.println("Escolha uma opção:");
             System.out.println("1. Adicionar tarefa");
             System.out.println("2. Listar tarefas");
@@ -40,21 +45,36 @@ public class TodoApp {
                     System.out.print("Digite a descrição da tarefa: ");
                     String descricao = sc.nextLine();
 
-                    System.out.print("Digite a data de término da tarefa (yyyy-MM-dd): ");
-                    String dataFimStr = sc.nextLine();
-                    LocalDate dataFim = LocalDate.parse(dataFimStr);
+                    LocalDate dataFim = null;
+                    boolean dataValida = false;
 
-                    TaskRequest taskRequest = new TaskRequest(
-                            nome,
-                            descricao,
-                            dataFim,
-                            null
-                    );
-                    taskService.addTask(taskRequest.toModel(taskRequest));
+                    while (!dataValida) {
+                        System.out.print("Digite a data de término da tarefa (yyyy-MM-dd): ");
+                        String dataFimStr = sc.nextLine();
 
-                    System.out.println("Tarefa adicionada com sucesso!");
+                        try {
+                            dataFim = LocalDate.parse(dataFimStr);
+                            dataValida = true;
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Erro: Data inválida! Use o formato yyyy-MM-dd");
+                        }
+                    }
 
-                    System.out.println("---------------------------------------------------------------");
+                    try {
+                        TaskRequest taskRequest = new TaskRequest(
+                                nome,
+                                descricao,
+                                dataFim
+                        );
+
+                        taskService.addTask(taskRequest.toModel(taskRequest));
+                        System.out.println("Tarefa adicionada com sucesso!");
+                        System.out.println("---------------------------------------------------------------");
+                        break;
+
+                    } catch (TaskException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
 
                 case 2:
@@ -66,7 +86,7 @@ public class TodoApp {
                     break;
 
                 case 3:
-                    System.out.println("---------------------------------------------------------------");
+                    System.out.println();
                     System.out.println("Escolha uma opção de status de tarefa para listar: ");
                     System.out.println("1. A_FAZER");
                     System.out.println("2. EM_ANDAMENTO");
@@ -80,16 +100,19 @@ public class TodoApp {
                             System.out.println("Tarefas A_FAZER:");
                             taskService.findByStatus(Status.A_FAZER)
                                     .forEach(System.out::println);
+                            System.out.println("---------------------------------------------------------------");
                             break;
                         case 2:
                             System.out.println("Tarefas EM_ANDAMENTO:");
                             taskService.findByStatus(Status.EM_ANDAMENTO)
                                     .forEach(System.out::println);
+                            System.out.println("---------------------------------------------------------------");
                             break;
                         case 3:
                             System.out.println("Tarefas CONCLUIDO:");
                             taskService.findByStatus(Status.CONCLUIDO)
                                     .forEach(System.out::println);
+                            System.out.println("---------------------------------------------------------------");
                             break;
                         default:
                             System.out.println("Opção inválida. Voltando ao menu principal.");
