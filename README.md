@@ -1,153 +1,235 @@
-📝 TODO App
+# 📝 TODO App
 
-Aplicação de gerenciamento de tarefas desenvolvida em Java 17, criada com o objetivo de praticar conceitos fundamentais de Programação Orientada a Objetos (OOP) e recursos essenciais da linguagem Java.
+Aplicação de gerenciamento de tarefas desenvolvida em **Java 17**, com foco no aprimoramento dos fundamentos da linguagem e dos principais conceitos de **Programação Orientada a Objetos (POO)**.
 
-A aplicação permite criar, listar, atualizar, concluir e excluir tarefas, utilizando serialização de objetos Java para persistência dos dados em arquivo.
+O sistema permite criar, listar, atualizar, concluir e remover tarefas por meio de uma interface de linha de comando (CLI), utilizando **serialização de objetos Java** para persistência dos dados em arquivo.
 
-📋 Sobre o Projeto
+---
 
-O TODO App é um sistema de gerenciamento de tarefas executado através de uma interface de linha de comando (console).
+## 🚀 Funcionalidades
 
-O projeto foi desenvolvido sem utilização de frameworks, como Spring Boot, para focar nos fundamentos da linguagem Java e compreender melhor seus principais recursos antes de introduzir camadas adicionais de abstração.
+* ✅ Criar tarefas
+* 📋 Listar todas as tarefas
+* 🏷️ Filtrar tarefas por status
+* ▶️ Iniciar uma tarefa
+* ✔️ Marcar tarefa como concluída
+* 🗑️ Excluir tarefas
+* 📂 Carregar tarefas automaticamente ao iniciar a aplicação
+* ⚠️ Validação de regras de negócio
+* 🛡️ Tratamento de exceções personalizadas
+* 🧪 Testes unitários com JUnit 5
 
-Principais funcionalidades
-Criar tarefas
-Listar todas as tarefas
-Buscar tarefa por ID
-Filtrar tarefas por status
-Atualizar tarefas
-Iniciar uma tarefa
-Marcar tarefa como concluída
-Excluir tarefas
-Salvar tarefas em arquivo
-Carregar tarefas ao iniciar a aplicação
-Validação de operações
-Tratamento de exceções
-Testes unitários com JUnit 5
-🎯 Objetivos do Projeto
+---
 
-O principal objetivo deste projeto é fortalecer os fundamentos necessários para o desenvolvimento profissional com Java.
+## 📖 Sobre o Projeto
 
-Durante o desenvolvimento são praticados conceitos como:
+O **TODO App** foi desenvolvido com o propósito de consolidar conhecimentos essenciais para o desenvolvimento profissional com Java.
 
-Programação Orientada a Objetos
-Encapsulamento
-Classes e objetos
-Herança
-Polimorfismo
-Enums
-Builder Pattern
-Collections
-Stream API
-Tratamento de exceções
-Manipulação de arquivos
-Serialização de objetos
-Testes unitários
-Maven
-Git e commits semânticos
-🧠 Conceitos Praticados
-🔹 Programação Orientada a Objetos
+Diferente de projetos baseados em Framework como Spring Boot, esta aplicação foi construída utilizando apenas recursos nativos da linguagem e bibliotecas padrão, permitindo um entendimento mais profundo dos mecanismos internos do Java antes da introdução de abstrações mais avançadas.
 
-A aplicação utiliza classes e objetos para representar o domínio da aplicação.
+A aplicação é executada diretamente pelo terminal e mantém os dados persistidos localmente através de serialização de objetos.
 
-A principal entidade do projeto é a classe Task, responsável por representar uma tarefa e seu estado.
+---
 
-Task task = Task.builder()
-        .title("Aprender Java")
-        .description("Estudar fundamentos de OOP")
-        .build();
-🔒 Encapsulamento
+## 🎯 Objetivos de Aprendizagem
 
-Os atributos das classes são mantidos como private, permitindo controlar como o estado dos objetos pode ser acessado ou alterado.
+Durante o desenvolvimento deste projeto foram praticados conceitos fundamentais como:
 
-Isso evita que outras partes da aplicação modifiquem diretamente os dados internos das entidades.
+* Programação Orientada a Objetos (POO)
+* Encapsulamento
+* Herança e Polimorfismo
+* Collections Framework
+* Stream API
+* Enums
+* Manipulação de Arquivos
+* Serialização de Objetos
+* Tratamento de Exceções
+* Testes Unitários
+* Maven
+* Git e Versionamento
 
-🔢 Enums
+---
 
-O status da tarefa é representado através de um enum:
+## 🏗️ Arquitetura do Projeto
 
-public enum TaskStatus {
+A aplicação foi organizada em camadas para promover separação de responsabilidades e facilitar a manutenção do código.
 
-    TODO,
-    IN_PROGRESS,
-    DONE
+```text
+data
+└── tasks.dat
+src
+└── main
+    └── java
+        └── br.petersonaraujo.task_todo
+            ├── exception
+            ├── model
+            ├── service
+            └── ui
+```
+
+### Responsabilidades
+
+| Camada        | Responsabilidade                            |
+| ------------- | ------------------------------------------- |
+| **model**     | Entidades e enums do domínio                |
+| **service**   | Regras de negócio e manipulação das tarefas |
+| **data**      | Persistência dos dados em arquivo           |
+| **exception** | Exceções personalizadas da aplicação        |
+| **ui**        | Interação com o usuário via console         |
+
+---
+
+## 🧠 Conceitos Praticados
+
+### 🔹 Programação Orientada a Objetos
+
+A entidade principal da aplicação é a classe `Task`, responsável por representar uma tarefa e seu ciclo de vida.
+
+---
+
+### 🔒 Encapsulamento
+
+Os atributos das entidades são mantidos privados e acessados por métodos controlados, garantindo maior segurança e consistência dos dados.
+
+```java
+private String nome;
+private Status descricao;
+```
+
+---
+
+### 🔢 Enums
+
+O status de cada tarefa é representado por um enum, evitando o uso de valores textuais espalhados pelo sistema.
+
+```java
+public enum Status {
+    A_FAZER,
+    EM_ANDAMENTO,
+    CONCLUIDO
 }
+```
 
-Dessa forma, a aplicação evita trabalhar com valores String espalhados pelo código, como "TODO" ou "DONE".
+Benefícios:
 
-🏗️ Builder Pattern
+* Evita erros de digitação
+* Facilita validações
+* Melhora a legibilidade do código
 
-O padrão Builder é utilizado para facilitar a criação dos objetos Task.
+---
 
-Exemplo:
+### 📦 Collections
 
-Task task = Task.builder()
-        .title("Aprender Java")
-        .description("Estudar Stream API")
-        .build();
+As tarefas são armazenadas utilizando estruturas da Collections Framework.
 
-Além de deixar a criação dos objetos mais legível, esse padrão permite adicionar novos atributos posteriormente sem deixar os construtores excessivamente grandes.
+```java
+List<Task> tasks = new ArrayList<>();
+```
 
-📦 Collections
+Também são utilizadas operações de agrupamento e filtragem com base no status das tarefas.
 
-O projeto utiliza diferentes estruturas de dados disponíveis na API de Collections do Java.
+---
 
-Exemplos:
+### 🌊 Stream API
 
-List<Task>
-ArrayList<Task>
-Map<TaskStatus, List<Task>>
+A Stream API é utilizada para consultas e filtros de forma declarativa.
 
-Essas estruturas são utilizadas para armazenar, pesquisar, filtrar e agrupar tarefas.
-
-🌊 Stream API
-
-A Stream API é utilizada para realizar operações sobre as coleções.
-
-Exemplo:
-
-public List<Task> findByStatus(TaskStatus status) {
-
-    return tasks.stream()
-            .filter(task -> task.getStatus() == status)
-            .toList();
+```java
+public List<Task> findByStatus(Status status) {
+        return tasks.stream()
+                .filter(task -> task.getStatus() == status)
+                .toList();
 }
+```
 
-Nesse caso, as tarefas são filtradas de acordo com seu status.
+---
 
-💾 Serialização
+### 💾 Persistência com Serialização
 
-A persistência dos dados é realizada através da serialização nativa do Java.
+A persistência dos dados é realizada utilizando a serialização nativa do Java.
 
-As tarefas são armazenadas em um arquivo .dat.
+#### Fluxo de gravação
 
-Fluxo de gravação:
-
+```text
 Lista de Tasks
       ↓
 ObjectOutputStream
       ↓
    tasks.dat
+```
 
-Fluxo de leitura:
+#### Fluxo de leitura
 
+```text
    tasks.dat
       ↓
 ObjectInputStream
       ↓
 Lista de Tasks
+```
 
-Dessa forma, as tarefas continuam disponíveis mesmo depois que a aplicação é encerrada.
+Com isso, as tarefas permanecem disponíveis mesmo após o encerramento da aplicação.
 
-⚠️ Tratamento de Exceções
+---
 
-O projeto possui uma exceção personalizada:
+### ⚠️ Tratamento de Exceções
 
+A aplicação utiliza exceções personalizadas para representar erros de negócio e problemas de persistência.
+
+```java
 public class TaskException extends RuntimeException {
 
     public TaskException(String message) {
         super(message);
     }
 }
+```
 
-Ela é utilizada para representar erros relacionados às regras da aplicação e à persistência dos dados.
+Exemplos de validações implementadas:
+
+* Data de término não pode estar no passado
+* Tarefa não encontrada
+* Erros durante leitura e gravação de arquivos
+
+---
+
+## 🧪 Testes Unitários
+
+O projeto utiliza **JUnit 5** para garantir o correto funcionamento das regras de negócio.
+
+Os testes cobrem cenários como:
+
+* Criação de tarefas
+* Mudança de status
+* Exclusão de tarefas
+* Validações de regras de negócio
+* Tratamento de exceções
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* Java 17
+* Maven
+* JUnit 5
+* Java Serialization
+* Git
+* GitHub
+
+---
+
+## 📚 Aprendizados
+
+Este projeto foi desenvolvido como parte da minha jornada de evolução como desenvolvedor Java, servindo como laboratório para praticar conceitos fundamentais da linguagem, boas práticas de programação e organização de código.
+
+Além de reforçar conhecimentos em POO, o projeto proporcionou experiência com persistência de dados, testes automatizados, tratamento de exceções e estruturação de aplicações Java sem frameworks.
+
+---
+
+## 👨‍💻 Autor
+
+**Peterson Araújo**
+
+Desenvolvedor Java em constante evolução, apaixonado por tecnologia, boas práticas de desenvolvimento e construção de soluções backend.
+
+🔗 GitHub: https://github.com/seu-usuario
